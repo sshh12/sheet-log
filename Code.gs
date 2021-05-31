@@ -29,25 +29,13 @@ function findUpdateRow(sheet, key, value) {
   return 0;
 }
 
-function doPost(e) {
-  var req = JSON.parse(e.postData.contents);
-  var spreadsheetId = req.spreadsheet_id;
-  var spreadsheet = SpreadsheetApp.openById(spreadsheetId);
-  var sheet = null;
-  for (var s of spreadsheet.getSheets()) {
-    if (s.getName() == "sheetlog") {
-      sheet = s;
-      break;
-    }
-  }
-  if (!sheet) {
-    return;
-  }
-  var payload = req.payload;
-  var row = Math.max(sheet.getLastRow() + 1, 2);
-  if (req.mode == "update") {
-    row = findUpdateRow(sheet, req.search_key, req.search_value);
-  }
+function serveJSON(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(
+    ContentService.MimeType.JSON
+  );
+}
+
+function writeRow(sheet, row, payload) {
   for (let part of payload) {
     let col = getHeaderCol(sheet, part.key);
     if (part.type == "image_b64") {
@@ -62,5 +50,44 @@ function doPost(e) {
       cell.setFormula(part.value);
     }
   }
-  return;
+}
+
+function writeTab(spreadsheet, name, payload) {
+  var sheet = spreadsheet.insertSheet(name);
+}
+
+function doPost(e) {
+  var req = JSON.parse(e.postData.contents);
+  var spreadsheetId = req.spreadsheet_id;
+  var spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+  var hasSheetLog = false;
+  var sheet = null;
+  for (var s of spreadsheet.getSheets()) {
+    if (s.getName() == "sheetlog") {
+      hasSheetLog = true;
+    }
+    if (s.getName() == req.sheet) {
+      sheet = s;
+    }
+  }
+  if (!hasSheetLog) {
+    return serveJSON({ status: "error", error: "Permission denied." });
+  }
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(req.sheet);
+  }
+  if (req.mode == "check") {
+    return serveJSON({ status: "ok" });
+  }
+  var payload = req.payload;
+  if (req.mode == "update" || req.mode == "append") {
+    var row = Math.max(sheet.getLastRow() + 1, 2);
+    if (req.mode == "update") {
+      row = findUpdateRow(sheet, req.search_key, req.search_value);
+    }
+    writeRow(sheet, row, payload);
+  } else if (req.mode == "append-tab") {
+    writeTab(spreadsheet, req.tab_name, payload);
+  }
+  return serveJSON({ status: "ok" });
 }
