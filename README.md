@@ -3,7 +3,7 @@
 ## Install
 
 1. `pip install git+https://github.com/sshh12/sheet-log`
-2. Create a script on [script.google.com](https://script.google.com/), copy-paste the contents of `Code.gs`, then deploy (`Execute as=Me`, `Who has access=Anyone`) as web-app.
+2. Create a script on [script.google.com](https://script.google.com/), copy-paste the contents of `Code.gs`, then deploy (`Execute as: Me`, `Who has access: Anyone`) as web-app.
 3. Create a [google sheet](https://sheet.new) that includes a tab named `sheetlog`. This is to ensure the web-app only modifies spreadsheets that are used by this app.
 
 ## Usage
@@ -37,6 +37,8 @@ for params, mean_test_score, rank_test_score in zip(
 ![scikit learn example](https://user-images.githubusercontent.com/6625384/120229535-f6c15f80-c212-11eb-8ac8-53aa570a1187.png)
 
 ### Scikit-learn TSNE Tabs
+
+Code example adapted from _[t-SNE: The effect of various perplexity values on the shape](https://scikit-learn.org/stable/auto_examples/manifold/plot_t_sne_perplexity.html)_.
 
 ```python
 from sklearn import manifold, datasets
