@@ -3,6 +3,8 @@
 ## Install
 
 1. `pip install git+https://github.com/sshh12/sheet-log`
+2. Create a script on [script.google.com](https://script.google.com/), copy-paste the contents of `Code.gs`, then deploy (`Execute as=Me`, `Who has access=Anyone`) as web-app.
+3. Create a google sheet that include a tab named `sheetlog`. This is to ensure the web-app only modifies spreadsheets that are used by this app.
 
 ## Usage
 
