@@ -47,8 +47,8 @@ import time
 from sheetlog import SheetLog
 
 sl = SheetLog(
-    app_url="https://script.google.com/macros/s/AKfycbwbat9Z8zGyUy6DoHljNrKJlaECdAwCGKPHzMfsKGuiuILV8gOyJqDubWVg4UOeHy6y9g/exec",
-    spreadsheet_id="1Zhc_GvozVi_XaCICcmShRdczeq6NgZkmo3QnW4X_CGg",
+    app_url="https://script.google.com/macros/s/.../exec",
+    spreadsheet_id="5F31_GE54Vi_....",
 )
 
 n_samples = 300
