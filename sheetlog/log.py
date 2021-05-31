@@ -58,13 +58,15 @@ class SheetLog:
             }
         )
 
-    def get_current_plot(self, name="image"):
+    def get_current_plot(self, name="image", clear=True):
         import matplotlib.pyplot as plt
 
         buf = io.BytesIO()
         plt.savefig(buf, format="png")
         buf.seek(0)
         encoded_buf = base64.b64encode(buf.read()).decode("ascii")
+        if clear:
+            plt.clf()
         return {"type": "image_b64", "value": encoded_buf, "name": name, "content_type": "image/png"}
 
     def _post(self, body):
